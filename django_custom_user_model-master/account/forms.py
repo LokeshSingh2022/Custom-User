@@ -1,8 +1,17 @@
+from dataclasses import fields
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from .models import *
+from django.forms import ModelForm
 
-from .models import User
-
+class BookDetails(ModelForm):
+    title = forms.CharField(max_length=200)
+    Author = forms.CharField(max_length=200)
+    Price = forms.IntegerField()
+    Edition = forms.IntegerField()
+    class Meta:
+        model = Book
+        fields = ['title','Author','Price','Edition']
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -38,3 +47,5 @@ class UserChangeForm(forms.ModelForm):
 
     def clean_password(self):
         return self.initial["password"]
+
+
