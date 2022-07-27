@@ -1,4 +1,3 @@
-from argparse import Action
 import csv
 from importlib.metadata import files
 from django.contrib import admin
@@ -8,6 +7,20 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserChangeForm, UserCreationForm
 from .models import User,Book,Cart,Customer
 
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('user','name','email','phone')
+    actions = ["export_as_csv"]
+    def export_as_csv(self, request, queryset):
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+        response = HttpResponse(content_type='text/csv') 
+        response['Content-Disposition'] = 'attachment; filename = export.csv'.format(meta) 
+        writer = csv.writer(response)
+        writer.writerow(field_names) 
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names]) 
+        return response
+    export_as_csv.short_description = "Export Selected"
 
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
@@ -64,6 +77,7 @@ class VillainAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
+
 admin.site.register(Book)
 admin.site.register(Cart)
-admin.site.register(Customer)
+admin.site.register(Customer,CustomerAdmin)
