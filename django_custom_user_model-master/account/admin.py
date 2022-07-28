@@ -1,6 +1,7 @@
+from ast import Try
 import csv
+from warnings import catch_warnings
 from django.http import HttpResponse
-from importlib.metadata import files
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -25,12 +26,16 @@ class CustomerAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_display = ('name','email','phone','date_created')
     actions = ["export_as_csv"]
 
+class CartAdmin(admin.ModelAdmin, ExportCsvMixin):
+    #list_display = ('customer', 'books') //ManytoMany: Can't be selected
+    actions = ["export_as_csv"]
+
 class BookAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_display = ('title','Author','Price','Edition','date_created')
     actions = ["export_as_csv"]
 
 #-----------Creating Custom User----------#
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(BaseUserAdmin,  ExportCsvMixin):
     form = UserChangeForm
     add_form = UserCreationForm
 
@@ -51,13 +56,14 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
-
+    actions = ["export_as_csv"]
+    
 
 # Register your models here.
 
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
 
-admin.site.register(Cart)
+admin.site.register(Cart, CartAdmin)
 admin.site.register(Customer,CustomerAdmin)
 admin.site.register(Book ,BookAdmin)
