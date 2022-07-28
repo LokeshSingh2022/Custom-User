@@ -61,6 +61,7 @@ class Book(models.Model):
     Author=models.CharField(max_length=200,null=True)
     Price=models.IntegerField()
     Edition=models.IntegerField()
+    date_created=models.DateTimeField(auto_now_add=True,null=True)
 
     def __str__(self):
         return str(self.title)

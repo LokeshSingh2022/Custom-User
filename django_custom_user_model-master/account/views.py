@@ -5,5 +5,5 @@ from .forms import *
 # Create your views here.
 def home(request):
     book = Book.objects.all()
-    return render(request, "templates/home.html", {'book':book})
+    return render(request, "home.html", {'book':book})
 
