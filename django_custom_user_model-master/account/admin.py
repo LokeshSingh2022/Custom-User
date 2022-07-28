@@ -22,7 +22,7 @@ class ExportCsvMixin:
         return response
     export_as_csv.short_description = "Export Selected"
 class CustomerAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ('user','name','email','phone','date_created')
+    list_display = ('name','email','phone','date_created')
     actions = ["export_as_csv"]
 
 class BookAdmin(admin.ModelAdmin, ExportCsvMixin):

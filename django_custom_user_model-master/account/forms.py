@@ -12,11 +12,17 @@ class BookDetails(ModelForm):
     class Meta:
         model = Book
         fields = ['title','Author','Price','Edition']
+class CustomerDetails(ModelForm):
+    name=forms.CharField(max_length=200)
+    phone=forms.CharField(max_length=200)
+    email=forms.CharField(max_length=100)
+    class Meta:
+        model = Customer
+        fields = ['name','phone','email']
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label='Password confirmation', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
         model = User
