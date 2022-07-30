@@ -1,6 +1,5 @@
 from ast import Try
 import csv
-from warnings import catch_warnings
 from django.http import HttpResponse
 from django.contrib import admin
 from django.contrib.auth.models import Group
